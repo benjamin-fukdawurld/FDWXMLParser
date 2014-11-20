@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding="UTF-8" standalone="no" ?>
+<MESSAGE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						xsi:noNamespaceSchemaLocation="message.xsd">
+    <HEADER>
+        <SRC>sourceName</SRC>
+        <DST number="2">
+            <NAME>dstName1</NAME>
+            <NAME>dstName2</NAME>
+        </DST>
+        <CMD>commandName</CMD>
+    </HEADER>
+    
+    <BODY bodysize="8">the body</BODY>
+</MESSAGE>
