@@ -1,0 +1,4 @@
+#ifndef BYTECONVERSION_H
+#define BYTECONVERSION_H
+
+#endif // BYTECONVERSION_H
