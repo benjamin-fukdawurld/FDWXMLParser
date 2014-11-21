@@ -12,7 +12,8 @@ SOURCES += main.cpp \
 \
     buildable/AbstractXMLBuildableObject.cpp \
     buildable/BuildableDestination.cpp \
-    buildable/BuildableHeader.cpp
+    buildable/BuildableHeader.cpp \
+    conversion/byteConversion.cpp
 
 OTHER_FILES +=
 
@@ -25,5 +26,6 @@ HEADERS += \
 \
     buildable/AbstractXMLBuildableObject.h \
     buildable/BuildableDestination.h \
-    buildable/BuildableHeader.h
+    buildable/BuildableHeader.h \
+    conversion/byteConversion.h
 
