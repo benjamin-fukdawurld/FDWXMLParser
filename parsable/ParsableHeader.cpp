@@ -9,10 +9,14 @@ const std::string ParsableHeader::SRC_BALISE_NAME("SRC");
 const std::string ParsableHeader::CMD_BALISE_NAME("CMD");
 
 ParsableHeader::ParsableHeader(XMLElement *selfElement) : AbstractXMLParsableObject(selfElement)
-{}
+{
+    init();
+}
 
 ParsableHeader::ParsableHeader(XMLNode *parent) : AbstractXMLParsableObject("HEADER", parent)
-{}
+{
+    init();
+}
 
 
 const XMLElement* ParsableHeader::getSource() const

@@ -12,10 +12,14 @@ const std::string ParsableDestination::DST_BALISE_NAME("DST");
 
 
 ParsableDestination::ParsableDestination(XMLElement *selfElement) : AbstractXMLParsableObject(selfElement)
-{}
+{
+    init();
+}
 
 ParsableDestination::ParsableDestination(tinyxml2::XMLNode *parent) : AbstractXMLParsableObject(DST_BALISE_NAME.c_str(), parent)
-{}
+{
+    init();
+}
 
 int ParsableDestination::getNumberOfDestination() const
 {

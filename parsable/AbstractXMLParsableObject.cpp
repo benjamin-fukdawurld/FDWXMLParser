@@ -5,14 +5,10 @@ using namespace std;
 
 
 AbstractXMLParsableObject::AbstractXMLParsableObject(XMLElement *selfElement) : m_isParsable(false), m_xmlElement(selfElement)
-{
-    onCreate();
-}
+{}
 
 AbstractXMLParsableObject::AbstractXMLParsableObject(const char* elementName, XMLNode *parent) : m_isParsable(false), m_xmlElement(parent->FirstChildElement(elementName))
-{
-    onCreate();
-}
+{}
 
 bool AbstractXMLParsableObject::XMLSuccess(const XMLError& result)
 {
@@ -61,7 +57,4 @@ string AbstractXMLParsableObject::toString()
     return string(printer.CStr());
 }
 
-void AbstractXMLParsableObject::onCreate()
-{
-    init();
-}
+

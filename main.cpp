@@ -9,6 +9,8 @@
 #include "buildable/BuildableHeader.h"
 #include "parsable/ParsableHeader.h"
 
+#include "conversion/byteConversion.h"
+
 using namespace std;
 using namespace tinyxml2;
 
@@ -201,4 +203,13 @@ int main()
 {
     ParsableHeader pheader;
     BuildableHeader bheader;
+
+    char tmp[10];
+
+    std::string str("123456789");
+
+    memcpy((unsigned char*) tmp, str.c_str(), str.size());
+
+    for(int i(0); i < 10; ++i)
+    std::cout << tmp[i] << endl;
 }

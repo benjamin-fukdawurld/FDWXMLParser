@@ -1,3 +1,5 @@
 FDWXMLParser.pro.*
 FDWXMLParser.depend*
-FDWXMLParser.layout
+FDWXMLParser.layout*
+build-FDWXMLParser-Desktop-Debug/*
+*~

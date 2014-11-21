@@ -31,9 +31,6 @@ class AbstractXMLParsableObject
 
         virtual std::string toString();
 
-    private:
-        void onCreate();
-
     protected:
         virtual void init() = 0;
 
