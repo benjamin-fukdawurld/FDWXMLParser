@@ -16,8 +16,24 @@ unsigned char *anyToByteArray(unsigned char *dst, const void *src, const size_t 
 void *anyFromByteArray(void *dst, const unsigned char *src, const size_t srcSize);
 
 
+unsigned char *cstrToByteArray(unsigned char *dst, const char *src, const size_t srcSize);
+
+unsigned char *cstrToByteArray(unsigned char *dst, const char *src);
+
+unsigned char *strToByteArray(unsigned char *dst, const std::string *src, const size_t srcSize);
+
+unsigned char *strToByteArray(unsigned char *dst, const std::string *src);
 
 
+char *cstrFromByteArray(char *dst, const unsigned char *src, const size_t srcSize);
+
+char *cstrFromByteArray(char *dst, const unsigned char *src);
+
+
+std::string *strFromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize);
+
+
+std::string *strFromByteArray(std::string *dst, const unsigned char *src);
 
 
 template<typename T>
@@ -33,18 +49,31 @@ unsigned char *toByteArray(unsigned char *dst, const T *src)
 }
 
 
+template<>
+inline unsigned char *toByteArray(unsigned char *dst, const char *src, const size_t srcSize)
+{
+    return cstrToByteArray(dst, src, srcSize);
+}
 
 template<>
-unsigned char *toByteArray(unsigned char *dst, const char *src, const size_t srcSize);
+inline unsigned char *toByteArray(unsigned char *dst, const char *src)
+{
+    return cstrToByteArray(dst, src);
+}
 
 template<>
-unsigned char *toByteArray(unsigned char *dst, const char *src);
+inline unsigned char *toByteArray(unsigned char *dst, const std::string *src, const size_t srcSize)
+{
+    return strToByteArray(dst, src, srcSize);
+}
 
 template<>
-unsigned char *toByteArray(unsigned char *dst, const std::string *src, const size_t srcSize);
+inline unsigned char *toByteArray(unsigned char *dst, const std::string *src)
+{
+    return strToByteArray(dst, src);
+}
 
-template<>
-unsigned char *toByteArray(unsigned char *dst, const std::string *src);
+
 
 
 template<typename T>
@@ -54,7 +83,6 @@ T *fromByteArray(T *dst, const unsigned char *src, const size_t dstSize)
 }
 
 
-
 template<typename T>
 T *fromByteArray(T *dst, const unsigned char *src)
 {
@@ -62,19 +90,32 @@ T *fromByteArray(T *dst, const unsigned char *src)
 }
 
 
+template<>
+inline char *fromByteArray(char *dst, const unsigned char *src, const size_t dstSize)
+{
+    return cstrFromByteArray(dst, src, dstSize);
+}
+
 
 template<>
-char *fromByteArray(char *dst, const unsigned char *src, const size_t srcSize);
+inline char *fromByteArray(char *dst, const unsigned char *src)
+{
+    return cstrFromByteArray(dst, src);
+}
 
 template<>
-char *fromByteArray(char *dst, const unsigned char *src);
+inline std::string *fromByteArray(std::string *dst, const unsigned char *src, const size_t dstSize)
+{
+    return strFromByteArray(dst, src, dstSize);
+}
 
 
+template<>
+inline std::string *fromByteArray(std::string *dst, const unsigned char *src)
+{
+    return strFromByteArray(dst, src);
+}
 
-std::string *fromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize);
-
-
-std::string *fromByteArray(std::string *dst, const unsigned char *src);
 
 
 

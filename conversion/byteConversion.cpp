@@ -27,24 +27,25 @@ void *anyFromByteArray(void *dst, const unsigned char *src, const size_t srcSize
 
 
 
-
-
-template<>
-unsigned char *toByteArray(unsigned char *dst, const char *src)
+unsigned char *cstrToByteArray(unsigned char *dst, const char *src, const size_t srcSize)
 {
-    return toByteArray(dst, src, (strlen(src) + 1)*sizeof(char));
+    return anyToByteArray(dst, src, srcSize);
 }
 
-template<>
-unsigned char *toByteArray(unsigned char *dst, const std::string *src, const size_t srcSize)
+
+unsigned char *cstrToByteArray(unsigned char *dst, const char *src)
+{
+    return cstrToByteArray(dst, src, (strlen(src) + 1)*sizeof(char));
+}
+
+unsigned char *strToByteArray(unsigned char *dst, const std::string *src, const size_t srcSize)
 {
     return anyToByteArray(dst, (void*) src->c_str(), srcSize);
 }
 
-template<>
-unsigned char *toByteArray(unsigned char *dst, const std::string *src)
+unsigned char *strToByteArray(unsigned char *dst, const std::string *src)
 {
-    return toByteArray(dst, src, src->size() + 1);
+    return strToByteArray(dst, src, src->size() + 1);
 }
 
 
@@ -54,24 +55,21 @@ unsigned char *toByteArray(unsigned char *dst, const std::string *src)
 
 
 
-template<>
-char *fromByteArray(char *dst, const unsigned char *src, const size_t srcSize)
+char *cstrFromByteArray(char *dst, const unsigned char *src, const size_t srcSize)
 {
     return (char*) anyFromByteArray((void*) dst, src, srcSize);
 }
 
-template<>
-char *fromByteArray(char *dst, const unsigned char *src)
+char *cstrFromByteArray(char *dst, const unsigned char *src)
 {
-    return fromByteArray(dst, src, (strlen((char*) src) + 1)*sizeof(char));
+    return cstrFromByteArray(dst, src, (strlen((char*) src) + 1)*sizeof(char));
 }
 
-template<>
-std::string *fromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize)
+std::string *strFromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize)
 {
     char *tmp = new char[srcSize];
 
-    fromByteArray((void*) tmp, src, srcSize);
+    cstrFromByteArray(tmp, src, srcSize);
 
     *dst = tmp;
 
@@ -81,13 +79,11 @@ std::string *fromByteArray(std::string *dst, const unsigned char *src, const siz
 }
 
 
-
-
-template<>
-std::string *fromByteArray(std::string *dst, const unsigned char *src)
+std::string *strFromByteArray(std::string *dst, const unsigned char *src)
 {
     size_t srcSize((strlen((char*) src) + 1)*sizeof(char));
 
-    return fromByteArray(dst, src, srcSize);
+    return strFromByteArray(dst, src, srcSize);
 }
+
 
