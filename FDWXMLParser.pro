@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     buildable/AbstractXMLBuildableObject.cpp \
     buildable/BuildableDestination.cpp \
     buildable/BuildableHeader.cpp \
-    conversion/byteConversion.cpp
+    conversion/byteConversion.cpp \
+    parsable/ParsableBody.cpp
 
 OTHER_FILES +=
 
@@ -27,5 +28,6 @@ HEADERS += \
     buildable/AbstractXMLBuildableObject.h \
     buildable/BuildableDestination.h \
     buildable/BuildableHeader.h \
-    conversion/byteConversion.h
+    conversion/byteConversion.h \
+    parsable/ParsableBody.h
 

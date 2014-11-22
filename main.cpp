@@ -201,19 +201,8 @@ int oldmain3()
 
 int main()
 {
-    /*ParsableHeader pheader;
+    ParsableHeader pheader;
     BuildableHeader bheader;
-
-    char tmp[10];
-
-    std::string str("123456789");
-
-    memcpy((unsigned char*) tmp, str.c_str(), str.size());
-
-    for(int i(0); i < 10; ++i)
-    std::cout << tmp[i] << endl;
-    */
-
 
     /*for(int i(0); i < 17; ++i)
     {
@@ -223,13 +212,19 @@ int main()
         cout << i << endl;
     }*/
 
-    string str("123456789"), str2;
+    string str("coucou les cocos ça va???"), str2;
 
-    unsigned char tmp[10] = {0};
+    unsigned char *tmp = 0;
+
+    tmp = new unsigned char[str.size()];
 
     toByteArray(tmp, &str);
 
     fromByteArray(&str2, tmp);
+
+    delete[] tmp;
+
+    cout << str << " => "<< str2 << endl;
 
 
     return 0;
