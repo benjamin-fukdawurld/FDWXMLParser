@@ -201,7 +201,7 @@ int oldmain3()
 
 int main()
 {
-    ParsableHeader pheader;
+    /*ParsableHeader pheader;
     BuildableHeader bheader;
 
     char tmp[10];
@@ -212,4 +212,25 @@ int main()
 
     for(int i(0); i < 10; ++i)
     std::cout << tmp[i] << endl;
+    */
+
+
+    /*for(int i(0); i < 17; ++i)
+    {
+        toOtherBase(cout, i, "hex", 2, '0');
+
+        cout << " " << hex << setw(2) << setfill('0');
+        cout << i << endl;
+    }*/
+
+    string str("123456789"), str2;
+
+    unsigned char tmp[10] = {0};
+
+    toByteArray(tmp, &str);
+
+    fromByteArray(&str2, tmp);
+
+
+    return 0;
 }

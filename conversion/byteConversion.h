@@ -2,114 +2,101 @@
 #define BYTECONVERSION_H
 
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <string>
 
 
 #include <stdint.h>
+#include <cstring>
 
 
+unsigned char *anyToByteArray(unsigned char *dst, const void *src, const size_t srcSize);
 
-unsigned char *toByteArray(unsigned char* dst, const void* src, const size_t srcSize);
+void *anyFromByteArray(void *dst, const unsigned char *src, const size_t srcSize);
 
 
 
-unsigned char *charToByteArray(unsigned char* dst, const char* src);
 
-unsigned char *charToByteArray(unsigned char* dst, const char* src, const size_t srcSize);
 
-unsigned char *stringToByteArray(unsigned char* dst, const std::string& src);
 
+template<typename T>
+unsigned char *toByteArray(unsigned char *dst, const T *src, const size_t srcSize)
+{
+    return anyToByteArray(dst, (void*) src, srcSize);
+}
 
+template<typename T>
+unsigned char *toByteArray(unsigned char *dst, const T *src)
+{
+    return toByteArray(dst, src, sizeof(T));
+}
 
-unsigned char *int64ToByteArray(unsigned char* dst, const int64_t *src);
 
-unsigned char *int32ToByteArray(unsigned char* dst, const int32_t *src);
 
-unsigned char *int16ToByteArray(unsigned char* dst, const int16_t *src);
+template<>
+unsigned char *toByteArray(unsigned char *dst, const char *src, const size_t srcSize);
 
-unsigned char *int8ToByteArray(unsigned char* dst, const int8_t *src);
+template<>
+unsigned char *toByteArray(unsigned char *dst, const char *src);
 
-unsigned char *longToByteArray(unsigned char* dst, const long *src);
+template<>
+unsigned char *toByteArray(unsigned char *dst, const std::string *src, const size_t srcSize);
 
-unsigned char *intToByteArray(unsigned char* dst, const int *src);
+template<>
+unsigned char *toByteArray(unsigned char *dst, const std::string *src);
 
-unsigned char *shortToByteArray(unsigned char* dst, const short *src);
 
+template<typename T>
+T *fromByteArray(T *dst, const unsigned char *src, const size_t dstSize)
+{
+    return (T*) anyFromByteArray((void*) dst, src, dstSize);
+}
 
 
 
-unsigned char *uint64ToByteArray(unsigned char* dst, const uint64_t *src);
+template<typename T>
+T *fromByteArray(T *dst, const unsigned char *src)
+{
+    return fromByteArray(dst, src, sizeof(T));
+}
 
-unsigned char *uint32ToByteArray(unsigned char* dst, const uint32_t *src);
 
-unsigned char *uint16ToByteArray(unsigned char* dst, const uint16_t *src);
 
-unsigned char *uint8ToByteArray(unsigned char* dst, const uint8_t *src);
+template<>
+char *fromByteArray(char *dst, const unsigned char *src, const size_t srcSize);
 
-unsigned char *ulongToByteArray(unsigned char* dst, const unsigned long *src);
+template<>
+char *fromByteArray(char *dst, const unsigned char *src);
 
-unsigned char *uintToByteArray(unsigned char* dst, const unsigned int *src);
 
-unsigned char *ushortToByteArray(unsigned char* dst, const unsigned short *src);
 
+std::string *fromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize);
 
 
-unsigned char *floatToByteArray(unsigned char* dst, const float *src);
+std::string *fromByteArray(std::string *dst, const unsigned char *src);
 
-unsigned char *doubleToByteArray(unsigned char* dst, const double *src);
 
-unsigned char *longDoubleToByteArray(unsigned char* dst, const long double *src);
 
 
+template<typename T, typename OUT>
+OUT &toOtherBase(OUT &out, T src, const char *base, int width, char c)
+{
+    if(strcmp(base, "dec") == 0)
+    out << std::dec;
+    else if(strcmp(base, "oct") == 0)
+    out << std::oct;
+    else if(strcmp(base, "hex") == 0)
+    out << std::hex;
 
+    if(width > 1)
+    out << std::setw(width) << std::setfill(c);
 
-void *fromByteArray(void *dst, const unsigned char *src, const size_t srcSize);
+    out << src;
 
+    return out;
+}
 
 
-char *charFromByteArray(char *dst, const unsigned char *src, const size_t srcSize);
-
-std::string& stringFromByteArray(std::string& dst, const unsigned char *src, const size_t srcSize);
-
-
-
-int64_t *int64FromByteArray(int64_t* dst, const unsigned char *src);
-
-int32_t *int32FromByteArray(int32_t* dst, const unsigned char *src);
-
-int16_t *int16FromByteArray(int16_t* dst, const unsigned char *src);
-
-int8_t *int8FromByteArray(int8_t* dst, const unsigned char *src);
-
-long *longFromByteArray(long* dst, const unsigned char *src);
-
-int *intFromByteArray(int* dst, const unsigned char *src);
-
-short *shortFromByteArray(short* dst, const unsigned char *src);
-
-
-
-
-uint64_t *uint64FromByteArray(uint64_t* dst, const unsigned char *src);
-
-uint32_t *uint32FromByteArray(uint32_t* dst, const unsigned char *src);
-
-uint16_t *uint16FromByteArray(uint16_t* dst, const unsigned char *src);
-
-uint8_t *uint8FromByteArray(uint8_t* dst, const unsigned char *src);
-
-unsigned long *longFromByteArray(unsigned long* dst, const unsigned char *src);
-
-unsigned int *intFromByteArray(unsigned int* dst, const unsigned char *src);
-
-unsigned  short *shortFromByteArray(unsigned short* dst, const unsigned char *src);
-
-
-
-float *floatFromByteArray(float* dst, const unsigned char *src);
-
-double *doubleFromByteArray(double* dst, const unsigned char *src);
-
-long double *longDoubleFromByteArray(long double* dst, const unsigned char *src);
 
 #endif // BYTECONVERSION_H
