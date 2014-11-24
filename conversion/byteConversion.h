@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-
+#include <vector>
 
 #include <stdint.h>
 #include <cstring>
@@ -138,6 +138,49 @@ OUT &toOtherBase(OUT &out, T src, const char *base, int width, char c)
     return out;
 }
 
+
+template<typename T, typename IN>
+T fromHexValue(IN &hexValue, T &out)
+{
+    out = 0;
+
+    hexValue >> std::hex >> out;
+
+    return out;
+}
+
+
+uint64_t hexValueToInt(const char* hexValue);
+
+unsigned char hexValueToByte(const char* hexValue);
+
+
+template<typename T>
+std::vector<T> hexValuesStringToVector(const std::string& hexValues)
+{
+    std::stringstream ss(hexValues);
+    std::vector<T> ret;
+
+    while(!ss.eof())
+    {
+        T val;
+
+        fromHexValue(ss, val);
+
+        ret.push_back(val);
+    }
+
+    return ret;
+}
+
+
+
+std::vector<unsigned char> hexValuesStringToByteVector(const std::string& hexValues);
+
+
+ const std::string byteVectorToHexValuesString(const std::vector<unsigned char> &byteVector);
+
+ const std::string byteArrayToHexValuesString(const unsigned char *byteArray, const size_t arrSize);
 
 
 #endif // BYTECONVERSION_H

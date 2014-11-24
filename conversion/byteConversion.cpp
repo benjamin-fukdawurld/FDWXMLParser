@@ -87,3 +87,50 @@ std::string *strFromByteArray(std::string *dst, const unsigned char *src)
 }
 
 
+
+
+uint64_t hexValueToInt(const char* hexValue)
+{
+    istringstream iss(hexValue);
+
+    uint64_t ret;
+    return fromHexValue(iss, ret);
+}
+
+
+
+unsigned char hexValueToByte(const char* hexValue)
+{
+    istringstream iss(hexValue);
+    unsigned char ret;
+    return fromHexValue(iss, ret);
+}
+
+std::vector<unsigned char> hexValuesStringToByteVector(const std::string& hexValues)
+{
+    return hexValuesStringToVector<unsigned char>(hexValues);
+}
+
+
+const std::string byteVectorToHexValuesString(const std::vector<unsigned char> &byteVector)
+{
+    std::ostringstream oss;
+
+    for(size_t i(0), c(byteVector.size()); i < c; ++i)
+    oss << std::hex << byteVector[i] << " ";
+
+    return oss.str();
+}
+
+
+const string byteArrayToHexValuesString(const unsigned char *byteArray, const size_t arrSize)
+{
+    std::ostringstream oss;
+
+    for(size_t i(0); i < arrSize; ++i)
+    oss << std::hex << byteArray[i] << " ";
+
+    return oss.str();
+}
+
+

@@ -143,7 +143,7 @@ const char* BuildableDestination::getBuiltElementName() const
 
 bool BuildableDestination::build(AbstractXMLParsableObject* built)
 {
-    if(strcmp(built->getParsedElementName(), "BuildableDestination") != 0)
+    if(built == 0 || strcmp(built->getParsedElementName(), "BuildableDestination") != 0)
     return false;
 
     return build((ParsableDestination*) built);
@@ -156,7 +156,7 @@ void BuildableDestination::checkBuildable()
 
 bool BuildableDestination::build(ParsableDestination* built)
 {
-    if(!isBuildable())
+    if(built == 0 || !isBuildable())
     return false;
 
     XMLDocument doc;

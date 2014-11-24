@@ -62,7 +62,7 @@ const char *BuildableHeader::getBuiltElementName() const
 
 bool BuildableHeader::build(AbstractXMLParsableObject *built)
 {
-    if(strcmp(built->getParsedElementName(), "BuildableDestination") != 0)
+    if(built == 0 || strcmp(built->getParsedElementName(), "BuildableDestination") != 0)
     return false;
 
     return build((ParsableDestination*) built);
@@ -77,7 +77,7 @@ void BuildableHeader::checkBuildable()
 
 bool BuildableHeader::build(ParsableHeader *built)
 {
-    if(!isBuildable())
+    if(built == 0 || !isBuildable())
     return false;
 
     ParsableDestination dest;
