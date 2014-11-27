@@ -9,6 +9,11 @@
 #include "buildable/BuildableHeader.h"
 #include "parsable/ParsableHeader.h"
 
+
+#include "buildable/BuildableBody.h"
+#include "parsable/ParsableBody.h"
+
+
 #include "conversion/byteConversion.h"
 
 using namespace std;
@@ -184,22 +189,36 @@ int oldmain2()
     return 0;
 }
 
-int oldmain3()
+/*int main()
 {
     XMLDocument doc;
+
+    cout << "1" << endl;
+
     if (!XMLSuccess(doc.LoadFile("message_example.xml")))
     return EXIT_FAILURE;
+
+    cout << "2" << endl;
 
     XMLPrinter printer;
     doc.Print(&printer);
 
+    cout << "3" << endl;
 
     string tmp(printer.CStr());
 
     cout << tmp << endl;
-}
 
-int main()
+    const char* text = doc.FirstChildElement("MESSAGE")->FirstChildElement("BODY")->GetText();
+
+    cout << "4" << endl;
+
+    cout << text << endl;
+
+    cout << "5" << endl;
+}*/
+
+int oldmain4()
 {
     ParsableHeader pheader;
     BuildableHeader bheader;
@@ -226,6 +245,34 @@ int main()
 
     cout << str << " => "<< str2 << endl;
 
+
+    return 0;
+}
+
+int main()
+{
+    XMLDocument doc;
+    if (!XMLSuccess(doc.LoadFile("message_example.xml")))
+    return EXIT_FAILURE;
+
+
+    BuildableDestination dest();
+    ParsableDestination pdest(&doc);
+
+    if(pdest.isParsable())
+    cout << "coucou" << endl;
+
+    /*std::string tmp("bande d'enfoirés!!!");
+    XMLDocument doc;
+    BuildableBody bbody;
+    ParsableBody pbody(&doc);
+
+    bbody.setBody(tmp);
+
+    bbody.build((AbstractXMLParsableObject*) &pbody);
+
+    cout << pbody.getInnerText() << endl << endl;
+    cout << pbody.toString() << endl;*/
 
     return 0;
 }

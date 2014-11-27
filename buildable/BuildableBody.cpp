@@ -1,9 +1,12 @@
 #include "BuildableBody.h"
 
+#include <sstream>
+
 #include "parsable/ParsableBody.h"
 
 #include "conversion/byteConversion.h"
 
+using namespace std;
 using namespace tinyxml2;
 
 
@@ -87,13 +90,19 @@ void BuildableBody::checkBuildable()
     m_isBuildable = (m_body != 0 && m_bodySize > 0) || (m_body == 0 && m_bodySize == 0);
 }
 
+
+
 bool BuildableBody::build(ParsableBody *built)
 {
-    XMLDocument doc;
+    if(built == 0 || !isBuildable() || !built->hasDocument())
+    return false;
+
+    XMLDocument &doc(*(built->getXMLDocument()));
     XMLElement *element = doc.NewElement(ParsableBody::BODY_BALISE_NAME.c_str());
 
-
-    element->SetAttribute("bodysize", "" + m_bodySize);
+    ostringstream oss;
+    oss << m_bodySize;
+    element->SetAttribute("bodysize", oss.str().c_str());
     if(m_bodySize > 0)
     {
         std::string text(byteArrayToHexValuesString(m_body, m_bodySize));

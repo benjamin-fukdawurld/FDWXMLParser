@@ -31,11 +31,17 @@ const XMLElement* ParsableHeader::getCommand() const
 
 const char* ParsableHeader::getSourceText() const
 {
+    if(getSource() == 0)
+    return 0;
+
     return m_source->GetText();
 }
 
 const char* ParsableHeader::getCommandText() const
 {
+    if(getCommand() == 0)
+    return 0;
+
     return m_command->GetText();
 }
 
@@ -63,36 +69,33 @@ bool ParsableHeader::parse(AbstractXMLBuildableObject* parsed) const
 
 void ParsableHeader::init()
 {
+    m_xmlDocument = 0;
+    m_isParsable = false;
+
     if(!hasElement())
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
+
+    m_xmlDocument = m_xmlElement->GetDocument();
 
     XMLElement *current = 0;
 
     current = m_xmlElement->FirstChildElement("SRC");
     if(current == 0)
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
+
     m_source = current;
+
 
     current = m_xmlElement->FirstChildElement("CMD");
     if(current == 0)
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
+
     m_command = current;
 
     current = m_xmlElement->FirstChildElement("DST");
     if(current == 0)
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
+
     m_destination.setXMLlement(current);
 
     m_isParsable = m_destination.isParsable();
@@ -101,7 +104,7 @@ void ParsableHeader::init()
 
 bool ParsableHeader::parse(BuildableHeader* parsed) const
 {
-    if(!isParsable() || parsed == NULL)
+    if(!isParsable() || parsed == 0 || !m_destination.isParsable())
     return false;
 
     BuildableDestination dest;

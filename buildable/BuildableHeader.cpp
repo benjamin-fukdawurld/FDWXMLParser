@@ -77,7 +77,7 @@ void BuildableHeader::checkBuildable()
 
 bool BuildableHeader::build(ParsableHeader *built)
 {
-    if(built == 0 || !isBuildable())
+    if(built == 0 || !isBuildable() || !built->hasDocument())
     return false;
 
     ParsableDestination dest;
@@ -96,7 +96,7 @@ bool BuildableHeader::build(ParsableHeader *built)
     cmd->SetText(m_commandName.c_str());
 
     element->InsertFirstChild(src);
-    dest.addToParentElement(element);
+    dest.appendToParentElement(element);
     element->InsertEndChild(cmd);
 
     built->setXMLlement(element);

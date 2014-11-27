@@ -1,13 +1,14 @@
 #include "AbstractXMLParsableObject.h"
 
+#include <iostream>
+
 using namespace tinyxml2;
 using namespace std;
 
-
-AbstractXMLParsableObject::AbstractXMLParsableObject(XMLElement *selfElement) : m_isParsable(false), m_xmlElement(selfElement)
+AbstractXMLParsableObject::AbstractXMLParsableObject(XMLElement *selfElement) : m_isParsable(false), m_xmlDocument(0), m_xmlElement(selfElement)
 {}
 
-AbstractXMLParsableObject::AbstractXMLParsableObject(const char* elementName, XMLNode *parent) : m_isParsable(false), m_xmlElement(parent->FirstChildElement(elementName))
+AbstractXMLParsableObject::AbstractXMLParsableObject(const char* elementName, XMLNode *parent) : m_isParsable(false), m_xmlDocument(0), m_xmlElement(parent->FirstChildElement(elementName))
 {}
 
 bool AbstractXMLParsableObject::XMLSuccess(const XMLError& result)
@@ -18,9 +19,19 @@ bool AbstractXMLParsableObject::XMLSuccess(const XMLError& result)
     return false;
 }
 
-void AbstractXMLParsableObject::addToParentElement(XMLElement *parent)
+void AbstractXMLParsableObject::appendToParentElement(XMLElement *parent)
 {
     parent->InsertEndChild(m_xmlElement);
+}
+
+bool AbstractXMLParsableObject::hasDocument() const
+{
+    return m_xmlDocument != 0;
+}
+
+XMLDocument *AbstractXMLParsableObject::getXMLDocument() const
+{
+    return m_xmlDocument;
 }
 
 bool AbstractXMLParsableObject::hasElement() const
@@ -44,17 +55,23 @@ bool AbstractXMLParsableObject::isParsable() const
     return hasElement() && m_isParsable;
 }
 
+string AbstractXMLParsableObject::getInnerText()
+{
+    if(!hasElement())
+    return "";
+
+    return m_xmlElement->GetText();
+}
+
 string AbstractXMLParsableObject::toString()
 {
-    XMLDocument doc;
-
-    doc.InsertFirstChild(m_xmlElement);
+    if(!hasElement() || !hasDocument())
+    return string();
 
     XMLPrinter printer;
-    doc.Print(&printer);
+    m_xmlDocument->Print(&printer);
 
-
-    return string(printer.CStr());
+    return printer.CStr();
 }
 
 

@@ -16,7 +16,7 @@ ParsableDestination::ParsableDestination(XMLElement *selfElement) : AbstractXMLP
     init();
 }
 
-ParsableDestination::ParsableDestination(tinyxml2::XMLNode *parent) : AbstractXMLParsableObject(DST_BALISE_NAME.c_str(), parent)
+ParsableDestination::ParsableDestination(XMLNode *parent) : AbstractXMLParsableObject(DST_BALISE_NAME.c_str(), parent)
 {
     init();
 }
@@ -69,6 +69,8 @@ bool ParsableDestination::parse(BuildableDestination* parsed) const
 int ParsableDestination::getXMLNumberAttribute() const
 {
     int ret(-1);
+
+    if(m_xmlElement != 0)
     m_xmlElement->QueryIntAttribute("number", &ret);
 
     return ret;
@@ -77,18 +79,18 @@ int ParsableDestination::getXMLNumberAttribute() const
 void ParsableDestination::init()
 {
     m_destinationList.clear();
+    m_xmlDocument = 0;
+    m_isParsable = false;
+
     if(!hasElement())
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
+
+    m_xmlDocument = m_xmlElement->GetDocument();
+
 
     XMLElement *current = m_xmlElement->FirstChildElement("NAME");
     if(current == 0)
-    {
-        m_isParsable = false;
-        return;
-    }
+    return;
 
     while(current != 0)
     {
@@ -99,9 +101,9 @@ void ParsableDestination::init()
     if(static_cast<int>(m_destinationList.size()) != getNumberOfDestination())
     {
         m_destinationList.clear();
-        m_isParsable = false;
         return;
     }
 
     m_isParsable = true;
 }
+

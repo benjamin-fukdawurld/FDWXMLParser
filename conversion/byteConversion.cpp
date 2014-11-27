@@ -128,7 +128,7 @@ const string byteArrayToHexValuesString(const unsigned char *byteArray, const si
     std::ostringstream oss;
 
     for(size_t i(0); i < arrSize; ++i)
-    oss << std::hex << byteArray[i] << " ";
+    oss << std::hex << byteArray[i];
 
     return oss.str();
 }

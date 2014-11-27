@@ -11,6 +11,7 @@ class AbstractXMLParsableObject
 {
     protected:
         bool m_isParsable;
+        tinyxml2::XMLDocument* m_xmlDocument;
         tinyxml2::XMLElement* m_xmlElement;
 
     public:
@@ -19,7 +20,10 @@ class AbstractXMLParsableObject
 
         static bool XMLSuccess(const tinyxml2::XMLError& result);
 
-        void addToParentElement(tinyxml2::XMLElement* parent);
+        void appendToParentElement(tinyxml2::XMLElement* parent);
+
+        virtual bool hasDocument() const;
+        virtual tinyxml2::XMLDocument *getXMLDocument() const;
 
         virtual bool hasElement() const;
         virtual const tinyxml2::XMLElement *getXMLElement() const;
@@ -29,9 +33,10 @@ class AbstractXMLParsableObject
         virtual const char* getParsedElementName() const = 0;
         virtual bool parse(AbstractXMLBuildableObject* parsed) const = 0;
 
+        virtual std::string getInnerText();
         virtual std::string toString();
 
-    protected:
+protected:
         virtual void init() = 0;
 
 };

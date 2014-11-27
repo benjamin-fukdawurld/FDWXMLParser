@@ -156,7 +156,7 @@ void BuildableDestination::checkBuildable()
 
 bool BuildableDestination::build(ParsableDestination* built)
 {
-    if(built == 0 || !isBuildable())
+    if(built == 0 || !isBuildable() || !built->hasDocument())
     return false;
 
     XMLDocument doc;
