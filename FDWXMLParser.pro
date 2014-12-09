@@ -16,7 +16,11 @@ SOURCES += main.cpp \
     conversion/byteConversion.cpp \
     parsable/ParsableBody.cpp \
     buildable/BuildableBody.cpp \
-    buildable/BuildableMessage.cpp
+    buildable/BuildableMessage.cpp \
+    message/AbstractBuildableObject.cpp \
+    message/Destination.cpp \
+    message/Header.cpp \
+    message/Body.cpp
 
 OTHER_FILES +=
 
@@ -33,5 +37,9 @@ HEADERS += \
     conversion/byteConversion.h \
     parsable/ParsableBody.h \
     buildable/BuildableBody.h \
-    buildable/BuildableMessage.h
+    buildable/BuildableMessage.h \
+    message/AbstractBuildableObject.h \
+    message/Destination.h \
+    message/Header.h \
+    message/Body.h
 

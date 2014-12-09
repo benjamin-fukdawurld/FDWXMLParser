@@ -10,5 +10,7 @@
         <CMD>commandName</CMD>
     </HEADER>
     
-    <BODY bodysize="8">the body</BODY>
+    <BODY bodysize="16">
+        54686520626F6479
+    </BODY>
 </MESSAGE>

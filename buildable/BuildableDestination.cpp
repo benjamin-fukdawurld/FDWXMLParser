@@ -149,6 +149,8 @@ bool BuildableDestination::build(AbstractXMLParsableObject* built)
     return build((ParsableDestination*) built);
 }
 
+
+
 void BuildableDestination::checkBuildable()
 {
     m_isBuildable = m_destinationNames.size() > 0;

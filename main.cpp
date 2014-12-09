@@ -16,6 +16,9 @@
 
 #include "conversion/byteConversion.h"
 
+#include "message/Header.h"
+#include "message/Body.h"
+
 using namespace std;
 using namespace tinyxml2;
 
@@ -255,24 +258,39 @@ int main()
     if (!XMLSuccess(doc.LoadFile("message_example.xml")))
     return EXIT_FAILURE;
 
+    Header header;
+    Body body;
 
-    BuildableDestination dest();
-    ParsableDestination pdest(&doc);
+    header.parse(doc, doc.FirstChildElement("MESSAGE"));
 
-    if(pdest.isParsable())
-    cout << "coucou" << endl;
+    cout << header << endl;
 
-    /*std::string tmp("bande d'enfoirés!!!");
-    XMLDocument doc;
-    BuildableBody bbody;
-    ParsableBody pbody(&doc);
+    body.parse(doc, doc.FirstChildElement("MESSAGE"));
 
-    bbody.setBody(tmp);
+    cout << body << endl;
 
-    bbody.build((AbstractXMLParsableObject*) &pbody);
-
-    cout << pbody.getInnerText() << endl << endl;
-    cout << pbody.toString() << endl;*/
+    unsigned char* sendable = body.createSendable();
+    char *received(0);
+    uint64_t size;
+    if(sendable != 0)
+    {
+        if(fromByteArray<uint64_t>(&size, sendable, sizeof(uint64_t)) != 0 && size > 0)
+        {
+            size -= sizeof(uint64_t);
+            received = new char[size + 1];
+            for (int i = 0; i < size + 1; ++i) {
+                received[i] = 0;
+            }
+            if(fromByteArray(received, sendable + sizeof(uint64_t), size) == 0)
+            {
+                cout << "failed" << endl;
+            }
+            else
+            {
+                cout << received << endl;
+            }
+        }
+    }
 
     return 0;
 }

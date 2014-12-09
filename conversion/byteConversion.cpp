@@ -8,7 +8,7 @@ unsigned char *anyToByteArray(unsigned char *dst, const void *src, const size_t 
     if(dst == 0 ||  srcSize <= 0)
     return 0;
 
-    memcpy((void*) dst, src, srcSize);
+    memcpy(static_cast<void*>(dst), src, srcSize);
 
     return dst;
 }
@@ -20,7 +20,7 @@ void *anyFromByteArray(void *dst, const unsigned char *src, const size_t srcSize
     if(dst == 0 ||  srcSize <= 0)
     return 0;
 
-    memcpy(dst, (void*) src, srcSize);
+    memcpy(dst, static_cast<const void*>(src), srcSize);
 
     return dst;
 }
@@ -101,9 +101,7 @@ uint64_t hexValueToInt(const char* hexValue)
 
 unsigned char hexValueToByte(const char* hexValue)
 {
-    istringstream iss(hexValue);
-    unsigned char ret;
-    return fromHexValue(iss, ret);
+    return static_cast<unsigned char>(hexValueToInt(hexValue));
 }
 
 std::vector<unsigned char> hexValuesStringToByteVector(const std::string& hexValues)
@@ -117,7 +115,7 @@ const std::string byteVectorToHexValuesString(const std::vector<unsigned char> &
     std::ostringstream oss;
 
     for(size_t i(0), c(byteVector.size()); i < c; ++i)
-    oss << std::hex << byteVector[i] << " ";
+    oss << std::hex << (int) byteVector[i] << ' ';
 
     return oss.str();
 }
@@ -127,8 +125,18 @@ const string byteArrayToHexValuesString(const unsigned char *byteArray, const si
 {
     std::ostringstream oss;
 
-    for(size_t i(0); i < arrSize; ++i)
-    oss << std::hex << byteArray[i];
+    size_t i(0);
+    for(i = 0; i < arrSize - 1; ++i)
+    {
+        int tmp = byteArray[i];
+        oss << std::hex << tmp << ' ';
+    }
+
+    if(i < arrSize)
+    {
+        int tmp = byteArray[i];
+        oss << std::hex << tmp;
+    }
 
     return oss.str();
 }

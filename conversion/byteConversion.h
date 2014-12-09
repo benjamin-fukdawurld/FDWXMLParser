@@ -11,33 +11,33 @@
 #include <cstring>
 
 
-unsigned char *anyToByteArray(unsigned char *dst, const void *src, const size_t srcSize);
+unsigned char *anyToByteArray(unsigned char *dst, const void *src, const uint64_t srcSize);
 
-void *anyFromByteArray(void *dst, const unsigned char *src, const size_t srcSize);
+void *anyFromByteArray(void *dst, const unsigned char *src, const uint64_t srcSize);
 
 
-unsigned char *cstrToByteArray(unsigned char *dst, const char *src, const size_t srcSize);
+unsigned char *cstrToByteArray(unsigned char *dst, const char *src, const uint64_t srcSize);
 
 unsigned char *cstrToByteArray(unsigned char *dst, const char *src);
 
-unsigned char *strToByteArray(unsigned char *dst, const std::string *src, const size_t srcSize);
+unsigned char *strToByteArray(unsigned char *dst, const std::string *src, const uint64_t srcSize);
 
 unsigned char *strToByteArray(unsigned char *dst, const std::string *src);
 
 
-char *cstrFromByteArray(char *dst, const unsigned char *src, const size_t srcSize);
+char *cstrFromByteArray(char *dst, const unsigned char *src, const uint64_t srcSize);
 
 char *cstrFromByteArray(char *dst, const unsigned char *src);
 
 
-std::string *strFromByteArray(std::string *dst, const unsigned char *src, const size_t srcSize);
+std::string *strFromByteArray(std::string *dst, const unsigned char *src, const uint64_t srcSize);
 
 
 std::string *strFromByteArray(std::string *dst, const unsigned char *src);
 
 
 template<typename T>
-unsigned char *toByteArray(unsigned char *dst, const T *src, const size_t srcSize)
+unsigned char *toByteArray(unsigned char *dst, const T *src, const uint64_t srcSize)
 {
     return anyToByteArray(dst, (void*) src, srcSize);
 }
@@ -50,7 +50,7 @@ unsigned char *toByteArray(unsigned char *dst, const T *src)
 
 
 template<>
-inline unsigned char *toByteArray(unsigned char *dst, const char *src, const size_t srcSize)
+inline unsigned char *toByteArray(unsigned char *dst, const char *src, const uint64_t srcSize)
 {
     return cstrToByteArray(dst, src, srcSize);
 }
@@ -62,7 +62,7 @@ inline unsigned char *toByteArray(unsigned char *dst, const char *src)
 }
 
 template<>
-inline unsigned char *toByteArray(unsigned char *dst, const std::string *src, const size_t srcSize)
+inline unsigned char *toByteArray(unsigned char *dst, const std::string *src, const uint64_t srcSize)
 {
     return strToByteArray(dst, src, srcSize);
 }
@@ -77,7 +77,7 @@ inline unsigned char *toByteArray(unsigned char *dst, const std::string *src)
 
 
 template<typename T>
-T *fromByteArray(T *dst, const unsigned char *src, const size_t dstSize)
+T *fromByteArray(T *dst, const unsigned char *src, const uint64_t dstSize)
 {
     return (T*) anyFromByteArray((void*) dst, src, dstSize);
 }
@@ -91,7 +91,7 @@ T *fromByteArray(T *dst, const unsigned char *src)
 
 
 template<>
-inline char *fromByteArray(char *dst, const unsigned char *src, const size_t dstSize)
+inline char *fromByteArray(char *dst, const unsigned char *src, const uint64_t dstSize)
 {
     return cstrFromByteArray(dst, src, dstSize);
 }
@@ -104,7 +104,7 @@ inline char *fromByteArray(char *dst, const unsigned char *src)
 }
 
 template<>
-inline std::string *fromByteArray(std::string *dst, const unsigned char *src, const size_t dstSize)
+inline std::string *fromByteArray(std::string *dst, const unsigned char *src, const uint64_t dstSize)
 {
     return strFromByteArray(dst, src, dstSize);
 }
@@ -120,20 +120,22 @@ inline std::string *fromByteArray(std::string *dst, const unsigned char *src)
 
 
 
-template<typename T, typename OUT>
-OUT &toOtherBase(OUT &out, T src, const char *base, int width, char c)
+template<typename IN, typename OUT>
+OUT &toOtherBase(OUT &out, IN src, const char *base, int width, char c)
 {
+    std::stringstream ss;
+    ss << src;
     if(strcmp(base, "dec") == 0)
-    out << std::dec;
+    ss >> std::dec;
     else if(strcmp(base, "oct") == 0)
-    out << std::oct;
+    ss >> std::oct;
     else if(strcmp(base, "hex") == 0)
-    out << std::hex;
+    ss >> std::hex;
 
     if(width > 1)
-    out << std::setw(width) << std::setfill(c);
+    ss >> std::setw(width) >> std::setfill(c);
 
-    out << src;
+    ss >> out;
 
     return out;
 }
@@ -159,18 +161,18 @@ template<typename T>
 std::vector<T> hexValuesStringToVector(const std::string& hexValues)
 {
     std::stringstream ss(hexValues);
-    std::vector<T> ret;
+    std::vector<T> vect;
 
     while(!ss.eof())
     {
-        T val;
-
-        fromHexValue(ss, val);
-
-        ret.push_back(val);
+        uint64_t out;
+        ss >> std::hex >> std::setw(2) >> out;
+        if(ss.eof())
+        break;
+        vect.push_back(static_cast<T>(out));
     }
 
-    return ret;
+    return vect;
 }
 
 
@@ -180,7 +182,7 @@ std::vector<unsigned char> hexValuesStringToByteVector(const std::string& hexVal
 
  const std::string byteVectorToHexValuesString(const std::vector<unsigned char> &byteVector);
 
- const std::string byteArrayToHexValuesString(const unsigned char *byteArray, const size_t arrSize);
+ const std::string byteArrayToHexValuesString(const unsigned char *byteArray, const uint64_t arrSize);
 
 
 #endif // BYTECONVERSION_H
