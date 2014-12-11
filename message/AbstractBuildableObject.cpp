@@ -1,6 +1,10 @@
 #include "AbstractBuildableObject.h"
 
+#include <algorithm>
+
 #include "conversion/byteConversion.h"
+
+using namespace std;
 
 AbstractBuildableObject::AbstractBuildableObject() : m_isBuildable(false){}
 
@@ -47,12 +51,11 @@ bool AbstractBuildableObject::fromString(const std::string &xml)
 
 bool AbstractBuildableObject::fromString(const char *xml, size_t size)
 {
-    std::cout << "ici" << std::endl;
     tinyxml2::XMLDocument doc;
-    std::cout << "la" << xml << std::endl;
-    doc.Parse(xml, size);
-
+    if(XMLSuccess(doc.Parse(xml, size)))
     return parse(doc);
+
+    return false;
 }
 
 
@@ -103,10 +106,8 @@ bool AbstractBuildableObject::fromSendable(unsigned char **sendable, const bool 
         return false;
     }
 
-    std::cout << "ici" << received << std::endl;
     bool ret(false);
     ret = fromString(received, size + 1);
-    std::cout << *this << std::endl;
     delete[] received;
 
     if(ret && doDelete)
@@ -120,13 +121,63 @@ bool AbstractBuildableObject::fromSendable(unsigned char **sendable, const bool 
 
 
 
+bool AbstractBuildableObject::save(const char *filePath)
+{
+    tinyxml2::XMLDocument doc;
+    if(filePath != 0 && build(doc))
+    {
+        return XMLSuccess(doc.SaveFile(filePath));
+    }
+
+    return false;
+}
 
 
-bool AbstractBuildableObject::XMLSuccess(const tinyxml2::XMLError& result)
+
+
+
+bool AbstractBuildableObject::XMLSuccess(const tinyxml2::XMLError &result)
 {
     if(result == tinyxml2::XML_SUCCESS || result == tinyxml2::XML_NO_ERROR)
     return true;
 
     return false;
+}
+
+void AbstractBuildableObject::escapeCharacters(std::string &xml)
+{
+    for(size_t i(0), c(xml.size()); i != c; ++i)
+    {
+        switch(xml.at(i))
+        {
+            case '&':
+                xml.erase(xml.begin() + i);
+                xml.insert(i, "&amp", 4);
+            break;
+
+            case '<':
+                xml.erase(xml.begin() + i);
+                xml.insert(i, "&lt", 3);
+            break;
+
+            case '>':
+                xml.erase(xml.begin() + i);
+                xml.insert(i, "&gt", 4);
+            break;
+
+            case '"':
+                xml.erase(xml.begin() + i);
+                xml.insert(i, "&quot", 5);
+            break;
+
+            case '\'':
+                xml.erase(xml.begin() + i);
+                xml.insert(i, "&apos", 5);
+            break;
+
+            default:
+            break;
+        }
+    }
 }
 

@@ -170,7 +170,6 @@ bool Body::parse(XMLDocument &doc, XMLElement *parent, const int number)
         }
     }
 
-
     checkBuildable();
 
     return m_isBuildable;

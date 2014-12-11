@@ -15,6 +15,7 @@ class AbstractBuildableObject
 
 
         static bool XMLSuccess(const tinyxml2::XMLError &result);
+        static void escapeCharacters(std::string &xml);
 
 
         virtual bool isBuildable() const;
@@ -26,6 +27,7 @@ class AbstractBuildableObject
         virtual bool fromString(const char *xml, size_t size = (size_t) -1);
         virtual unsigned char *createSendable() const;
         virtual bool fromSendable(unsigned char **sendable, const bool doDelete = true);
+        virtual bool save(const char *filePath);
 
     protected:
         virtual void checkBuildable() = 0;

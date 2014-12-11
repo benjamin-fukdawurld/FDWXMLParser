@@ -162,13 +162,10 @@ std::vector<T> hexValuesStringToVector(const std::string& hexValues)
 {
     std::stringstream ss(hexValues);
     std::vector<T> vect;
+    uint64_t out;
 
-    while(!ss.eof())
+    while(ss >> std::hex >> out)
     {
-        uint64_t out;
-        ss >> std::hex >> std::setw(2) >> out;
-        if(ss.eof())
-        break;
         vect.push_back(static_cast<T>(out));
     }
 
