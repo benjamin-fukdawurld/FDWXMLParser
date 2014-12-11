@@ -259,7 +259,7 @@ int main()
     return EXIT_FAILURE;
 
     Header header;
-    Body body;
+    Body body, body2;
 
     header.parse(doc, doc.FirstChildElement("MESSAGE"));
 
@@ -270,26 +270,12 @@ int main()
     cout << body << endl;
 
     unsigned char* sendable = body.createSendable();
-    char *received(0);
-    uint64_t size;
-    if(sendable != 0)
+    if(body2.fromSendable(&sendable))
+    cout << body2 << endl;
+    else
     {
-        if(fromByteArray<uint64_t>(&size, sendable, sizeof(uint64_t)) != 0 && size > 0)
-        {
-            size -= sizeof(uint64_t);
-            received = new char[size + 1];
-            for (int i = 0; i < size + 1; ++i) {
-                received[i] = 0;
-            }
-            if(fromByteArray(received, sendable + sizeof(uint64_t), size) == 0)
-            {
-                cout << "failed" << endl;
-            }
-            else
-            {
-                cout << received << endl;
-            }
-        }
+        delete[] sendable;
+        cout << "fail" << endl;
     }
 
     return 0;

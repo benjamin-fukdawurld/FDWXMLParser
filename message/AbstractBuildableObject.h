@@ -22,7 +22,10 @@ class AbstractBuildableObject
         virtual bool build(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent = 0, const int number = 1) const = 0;
         virtual bool parse(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent = 0, const int number = 1) = 0;
         virtual const char *toString() const;
+        virtual bool fromString(const std::string& xml);
+        virtual bool fromString(const char *xml, size_t size = (size_t) -1);
         virtual unsigned char *createSendable() const;
+        virtual bool fromSendable(unsigned char **sendable, const bool doDelete = true);
 
     protected:
         virtual void checkBuildable() = 0;
