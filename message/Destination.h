@@ -2,6 +2,7 @@
 #define DESTINATION_H
 
 
+#include "message/FDWMessage.h"
 #include "message/AbstractBuildableObject.h"
 
 #include <list>
@@ -9,15 +10,19 @@
 
 
 
-class Destination : public AbstractBuildableObject
+class FDWMessage::Destination : public AbstractBuildableObject
 {
     public:
         static const std::string DST_BALISE_NAME;
         static const std::string DSTNAME_BALISE_NAME;
         static const std::string DSTNUMBER_ATTRIBUT_NAME;
 
+
+
     protected:
         std::list<std::string> m_destinationNames;
+
+
 
     public:
         Destination(const std::list<std::string> &destinationNames = std::list<std::string>());
@@ -46,6 +51,7 @@ class Destination : public AbstractBuildableObject
         virtual bool build(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent = 0, const int number = 1) const;
         virtual bool parse(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent = 0, const int number = 1);
         
+
 
     protected:
         virtual void checkBuildable();

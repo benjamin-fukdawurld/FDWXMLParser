@@ -2,17 +2,25 @@
 
 #include "conversion/byteConversion.h"
 
+
+
 using namespace std;
 using namespace tinyxml2;
+using namespace FDWMessage;
+
+
 
 const std::string Body::BODY_BALISE_NAME("BODY");
 const std::string Body::BODYSIZE_ATTRIBUTE_NAME("bodysize");
+
+
+
 
 Body::Body(uint64_t bodySize, unsigned char *body) : AbstractBuildableObject(),
                                                      m_bodySize(bodySize),
                                                      m_body(body)
 {
-
+    checkBuildable();
 }
 
 Body::~Body()
@@ -107,7 +115,7 @@ bool Body::build(XMLDocument &doc, XMLElement *parent, const int number) const
 
     XMLElement *antecedant(0);
     antecedant = (parent != 0 ? parent->FirstChildElement(BODY_BALISE_NAME.c_str()) : doc.FirstChildElement(BODY_BALISE_NAME.c_str()));
-    for(int i(0), c(number - 1); i < c && elm != 0; ++i)
+    for(int i(0), c(number - 1); i < c && antecedant != 0; ++i)
     antecedant = antecedant->NextSiblingElement(BODY_BALISE_NAME.c_str());
 
     if(parent != 0)
@@ -115,14 +123,14 @@ bool Body::build(XMLDocument &doc, XMLElement *parent, const int number) const
         if(antecedant != 0)
         parent->InsertAfterChild(antecedant, elm);
         else
-        parent->InsertFirstChild(elm);
+        parent->InsertEndChild(elm);
     }
     else
     {
         if(antecedant != 0)
         doc.InsertAfterChild(antecedant, elm);
         else
-        doc.InsertFirstChild(elm);
+        doc.InsertEndChild(elm);
     }
 
     return true;

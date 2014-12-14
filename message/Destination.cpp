@@ -1,6 +1,5 @@
 #include "Destination.h"
 
-
 #include <iterator>
 #include <algorithm>
 
@@ -8,11 +7,15 @@
 
 using namespace std;
 using namespace tinyxml2;
+using namespace FDWMessage;
+
 
 
 const std::string Destination::DST_BALISE_NAME("DST");
 const std::string Destination::DSTNAME_BALISE_NAME("NAME");
 const std::string Destination::DSTNUMBER_ATTRIBUT_NAME("number");
+
+
 
 
 Destination::Destination(const list<string> &destinationNames) :
@@ -171,7 +174,7 @@ bool Destination::build(XMLDocument &doc, XMLElement *parent, const int number) 
         if(nameElm == 0)
         return false;
 
-        nameElm->SetText(getDestinationName(i).c_str());
+        nameElm->SetText(escapeCharacters(getDestinationName(i)));
         elm->InsertEndChild(nameElm);
     }
 
@@ -186,14 +189,14 @@ bool Destination::build(XMLDocument &doc, XMLElement *parent, const int number) 
         if(antecedant != 0)
         parent->InsertAfterChild(antecedant, elm);
         else
-        parent->InsertFirstChild(elm);
+        parent->InsertEndChild(elm);
     }
     else
     {
         if(antecedant != 0)
         doc.InsertAfterChild(antecedant, elm);
         else
-        doc.InsertFirstChild(elm);
+        doc.InsertEndChild(elm);
     }
 
     return true;

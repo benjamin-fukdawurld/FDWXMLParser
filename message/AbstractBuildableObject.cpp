@@ -4,7 +4,13 @@
 
 #include "conversion/byteConversion.h"
 
+
+
 using namespace std;
+using namespace FDWMessage;
+
+
+
 
 AbstractBuildableObject::AbstractBuildableObject() : m_isBuildable(false){}
 
@@ -39,9 +45,8 @@ const char *AbstractBuildableObject::toString() const
 
 
 
-bool AbstractBuildableObject::fromString(const std::string &xml)
+bool AbstractBuildableObject::fromString(const string &xml)
 {
-    std::cout << "ici2" << std::endl;
     return fromString(xml.c_str(), xml.size());
 }
 
@@ -51,6 +56,7 @@ bool AbstractBuildableObject::fromString(const std::string &xml)
 
 bool AbstractBuildableObject::fromString(const char *xml, size_t size)
 {
+
     tinyxml2::XMLDocument doc;
     if(XMLSuccess(doc.Parse(xml, size)))
     return parse(doc);
@@ -144,40 +150,44 @@ bool AbstractBuildableObject::XMLSuccess(const tinyxml2::XMLError &result)
     return false;
 }
 
-void AbstractBuildableObject::escapeCharacters(std::string &xml)
+const char *AbstractBuildableObject::escapeCharacters(const string &xml)
 {
-    for(size_t i(0), c(xml.size()); i != c; ++i)
+    string ret(xml);
+
+    for(size_t i(0), c(ret.size()); i < c; ++i)
     {
-        switch(xml.at(i))
+        switch(ret.at(i))
         {
             case '&':
-                xml.erase(xml.begin() + i);
-                xml.insert(i, "&amp", 4);
+                ret.erase(ret.begin() + i);
+                ret.insert(i, "&amp", 4);
             break;
 
             case '<':
-                xml.erase(xml.begin() + i);
-                xml.insert(i, "&lt", 3);
+                ret.erase(ret.begin() + i);
+                ret.insert(i, "&lt", 3);
             break;
 
             case '>':
-                xml.erase(xml.begin() + i);
-                xml.insert(i, "&gt", 4);
+                ret.erase(ret.begin() + i);
+                ret.insert(i, "&gt", 4);
             break;
 
             case '"':
-                xml.erase(xml.begin() + i);
-                xml.insert(i, "&quot", 5);
+                ret.erase(ret.begin() + i);
+                ret.insert(i, "&quot", 5);
             break;
 
             case '\'':
-                xml.erase(xml.begin() + i);
-                xml.insert(i, "&apos", 5);
+                ret.erase(ret.begin() + i);
+                ret.insert(i, "&apos", 5);
             break;
 
             default:
             break;
         }
     }
+
+    return ret.c_str();
 }
 

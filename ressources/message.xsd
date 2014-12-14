@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="SRC" type="xsd:token"/>
+	<xsd:element name="CMD" type="xsd:token"/>
+	
+	<xsd:element name="DST">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" name="NAME" type="xsd:token"/>
+			</xsd:sequence>
+			<xsd:attribute name="number" type="xsd:positiveInteger"/>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="HEADER">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="SRC"/>
+				<xsd:element ref="DST"/>
+				<xsd:element ref="CMD"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="BODY">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base="xsd:string">
+					<xsd:attribute name="bodysize" type="xsd:positiveInteger"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	
+	
+	<xsd:element name="MESSAGE">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="HEADER"/>
+				<xsd:element ref="BODY"/>
+			</xsd:sequence>
+		</xsd:complexType>
+    </xsd:element>
+</xsd:schema>

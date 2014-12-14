@@ -1,10 +1,19 @@
 #include "Header.h"
+
+
+
 using namespace std;
 using namespace tinyxml2;
+using namespace FDWMessage;
+
+
 
 const std::string Header::HEADER_BALISE_NAME("HEADER");
 const std::string Header::SRC_BALISE_NAME("SRC");
 const std::string Header::CMD_BALISE_NAME("CMD");
+
+
+
 
 Header::Header(std::string sourceName,
                                  std::string commandName,
@@ -33,7 +42,7 @@ const Destination& Header::getDestinations() const
     return m_destinationNames;
 }
 
-const Destination* Header::getDestinationsPtr() const
+const Destination *Header::getDestinationsPtr() const
 {
     return &m_destinationNames;
 }
@@ -78,10 +87,14 @@ bool Header::build(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent, con
     if(cmd == 0)
     return false;
 
-    src->SetText(m_sourceName.c_str());
-    cmd->SetText(m_commandName.c_str());
+    {
+        string str(escapeCharacters(m_sourceName));
+        src->SetText(str.c_str());
+        str = escapeCharacters(m_commandName);
+        cmd->SetText(str.c_str());
+    }
 
-    elm->InsertFirstChild(src);
+    elm->InsertEndChild(src);
 
     if(!m_destinationNames.build(doc, elm))
     return false;
@@ -90,7 +103,7 @@ bool Header::build(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent, con
 
     XMLElement *antecedant(0);
     antecedant = (parent != 0 ? parent->FirstChildElement(HEADER_BALISE_NAME.c_str()) : doc.FirstChildElement(HEADER_BALISE_NAME.c_str()));
-    for(int i(0), c(number - 1); i < c && elm != 0; ++i)
+    for(int i(0), c(number - 1); i < c && antecedant != 0; ++i)
     antecedant = antecedant->NextSiblingElement(HEADER_BALISE_NAME.c_str());
 
 
@@ -99,14 +112,14 @@ bool Header::build(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement *parent, con
         if(antecedant != 0)
         parent->InsertAfterChild(antecedant, elm);
         else
-        parent->InsertFirstChild(elm);
+        parent->InsertEndChild(elm);
     }
     else
     {
         if(antecedant != 0)
         doc.InsertAfterChild(antecedant, elm);
         else
-        doc.InsertFirstChild(elm);
+        doc.InsertEndChild(elm);
     }
 
     return true;
@@ -116,19 +129,25 @@ bool Header::parse(XMLDocument &doc, XMLElement *parent, const int number)
 {
     XMLElement *elm(0);
 
-    elm = (parent != 0 ? parent->FirstChildElement("HEADER") : doc.FirstChildElement("HEADER"));
+    elm = (parent != 0 ? parent->FirstChildElement(HEADER_BALISE_NAME.c_str()) : doc.FirstChildElement(HEADER_BALISE_NAME.c_str()));
+
 
     for(int i(0), c(number - 1); i < c && elm != 0; ++i)
     elm = elm->NextSiblingElement(HEADER_BALISE_NAME.c_str());
 
+
     if(elm == 0)
     return (m_isBuildable = false);
 
+
     XMLElement *src = elm->FirstChildElement(SRC_BALISE_NAME.c_str());
+
+    if(src == 0)
+    return (m_isBuildable = false);
+
     m_sourceName = src->GetText();
 
-    m_destinationNames.parse(doc, elm);
-    if(!m_destinationNames.isBuildable())
+    if(!m_destinationNames.parse(doc, elm))
     return (m_isBuildable = false);
 
     XMLElement *cmd = elm->FirstChildElement(CMD_BALISE_NAME.c_str());
